@@ -22,8 +22,8 @@ class UserProfile(models.Model):
     profile_image = models.CharField(max_length=255, null=True, blank=True)
     bio = models.TextField(blank=True, null=True)
     tagline = models.CharField(blank=True, null=True, max_length=140)
-    followers = models.PositiveIntegerField(null=True, blank=True)
-    following = models.PositiveIntegerField(null=True, blank=True)
+    followers_count = models.PositiveIntegerField(null=True, blank=True, default=0)
+    following_count = models.PositiveIntegerField(null=True, blank=True, default=0)
     active = models.BooleanField(default=True)
     loggedIn = models.BooleanField(default=True)
     online = models.BooleanField(default=True)
@@ -32,6 +32,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.user.username)
+
+    @property
+    def followers(self):
+        return self.userprofilefollower_set.all()
+
+    
+    @property
+    def followers(self):
+        return self.userprofilefollowing_set.all()
 
 
 
