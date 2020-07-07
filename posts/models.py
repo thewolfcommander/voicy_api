@@ -17,7 +17,12 @@ class PostCategory(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __srt__(self):
-        return "{} - {}".format(str(self.id), str(self.name))
+        return str(self.id)
+
+    @property
+    def posts(self):
+        return self.post_set.all()
+
 
 
 class Post(models.Model):
@@ -38,6 +43,19 @@ class Post(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    @property
+    def medias(self):
+        return self.postmedia_set.all()
+
+
+    @property
+    def locations(self):
+        return self.postlocation_set.all()
+
+    @property
+    def sources(self):
+        return self.postsource_set.all()
 
 
 class PostMedia(models.Model):
