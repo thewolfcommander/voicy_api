@@ -22,18 +22,18 @@ class UserProfileCreateAPIView(generics.CreateAPIView):
 
 class ListAllUsersAPIView(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserShowSerializer
+    serializer_class = UserCreateSerializer
 
 
 
 class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
-    serializer_class = UserShowSerializer
+    serializer_class = UserCreateSerializer
     lookup_field = 'id'
 
 
 
-class ListAllUserProfilesAPIView(generics.CreateAPIView):
+class ListAllUserProfilesAPIView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileShowSerializer
 

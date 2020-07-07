@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.user.username)
+        return str(self.id)
 
     @property
     def followers(self):
@@ -39,7 +39,7 @@ class UserProfile(models.Model):
 
     
     @property
-    def followers(self):
+    def following(self):
         return self.userprofilefollowing_set.all()
 
 
