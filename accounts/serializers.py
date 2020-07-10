@@ -85,6 +85,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'is_active',
         )
 
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        
+        instance = validated_data
+        if password is not None:
+            instance = User.objects.create(**validated_data, is_active=True)
+            instance.set_password(password)
+            instance.save()
+
+        return instance
+
 
 
 class UserProfileShowSerializer(serializers.ModelSerializer):
