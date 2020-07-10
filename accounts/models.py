@@ -35,12 +35,12 @@ class UserProfile(models.Model):
 
     @property
     def followers(self):
-        return self.userprofilefollower_set.all()
+        follower_set = []
+        for obj in self.userprofilefollower_set.all():
+            if obj.follower == self.id:
+                follower_set.append(obj)
+        return follower_set
 
-    
-    @property
-    def following(self):
-        return self.userprofilefollowing_set.all()
 
 
 
@@ -56,21 +56,6 @@ class UserProfileFollower(models.Model):
     def __str__(self):
         return str(self.id)
 
-    
-
-class UserProfileFollowing(models.Model):
-    """
-    This will handle all the transactions related to  followers
-    """
-    id = models.CharField(max_length=100, unique=True, primary_key=True, blank=True)
-    following_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="following_profile")
-    following = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.id)
-
-
 
 def pre_save_id_reciever(sender, instance, **kwargs):
     if not instance.id:
@@ -79,4 +64,3 @@ def pre_save_id_reciever(sender, instance, **kwargs):
 
 pre_save.connect(pre_save_id_reciever, sender=UserProfile)
 pre_save.connect(pre_save_id_reciever, sender=UserProfileFollower)
-pre_save.connect(pre_save_id_reciever, sender=UserProfileFollowing)

@@ -3,8 +3,7 @@ from rest_framework import serializers
 
 from accounts.models import (
     UserProfile,
-    UserProfileFollower,
-    UserProfileFollowing
+    UserProfileFollower
 )
 
 
@@ -39,17 +38,6 @@ class UserProfileFollowerSerializer(serializers.ModelSerializer):
 
 
 
-class UserProfileFollowingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfileFollowing
-        fields = (
-            'id',
-            'following_profile',
-            'following',
-            'added'
-        )
-
-
 class UserProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -71,6 +59,18 @@ class UserProfileCreateSerializer(serializers.ModelSerializer):
         )
 
 
+class UserProfileFollowerShowSerializer(serializers.ModelSerializer):
+    follower = UserProfileCreateSerializer(read_only=True)
+    follower_profile = UserProfileCreateSerializer(read_only=True)
+    class Meta:
+        model = UserProfileFollower
+        fields = (
+            'id',
+            'follower_profile',
+            'follower',
+            'added',
+        )
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,8 +88,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserProfileShowSerializer(serializers.ModelSerializer):
-    followers = UserProfileFollowerSerializer(many=True, read_only=True)
-    following = UserProfileFollowingSerializer(many=True, read_only=True)
     user = UserCreateSerializer(read_only=True)
     class Meta:
         model = UserProfile
@@ -108,6 +106,4 @@ class UserProfileShowSerializer(serializers.ModelSerializer):
             'online',
             'timestamp',
             'updated',
-            'followers',
-            'following'
         )
