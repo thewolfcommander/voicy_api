@@ -68,7 +68,7 @@ class PostMedia(models.Model):
         ('video', 'Video')
     ]
     id = models.CharField(max_length=100, blank=True, primary_key=True, unique=True)
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     media_type = models.CharField(max_length=100, choices=MEDIA_TYPE_CHOICES, default="image")
     media_url = models.URLField(null=True, blank=True, max_length=1150)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -82,7 +82,7 @@ class PostSource(models.Model):
     Model to handle source of proof
     """
     id = models.CharField(max_length=100, blank=True, primary_key=True, unique=True)
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     media_url = models.TextField(null=True, blank=True, max_length=1150)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -95,7 +95,7 @@ class PostLocation(models.Model):
     Model to determine location on which post is added
     """
     id = models.CharField(max_length=100, blank=True, primary_key=True, unique=True)
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     lat = models.DecimalField(max_digits=30, decimal_places=12, default=24.246461162)
     lng = models.DecimalField(max_digits=30, decimal_places=12, default=24.246461162)
     timestamp = models.DateTimeField(auto_now_add=True)
