@@ -7,6 +7,7 @@ from accounts.models import (
 )
 
 
+
 class UserProfileFollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileFollower
@@ -36,6 +37,16 @@ class UserProfileFollowerSerializer(serializers.ModelSerializer):
             instance = validated_data
         return instance
 
+
+    def delete(self, instance):
+        instance.follower_profile.followers_count -= 1
+        instance.follower_profile.save()
+        instance.follower.following_count -= 1
+        instance.follower.save()
+        print(instance)
+        print(follower.following_count)
+        print(follower_profile.follower_count)
+        instance.delete()
 
 
 class UserProfileCreateSerializer(serializers.ModelSerializer):
@@ -94,6 +105,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
             instance.set_password(password)
             instance.save()
 
+        return instance
+
+    
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.password = validated_data.get('password', instance.password)
+        instance.email = validated_data.get('email', instance.email)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+
+        instance.save()
         return instance
 
 

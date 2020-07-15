@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework.views import Response, status
 from rest_framework import generics, permissions, authentication
 
 from accounts.permissions import IsOwnerOrReadOnlyProfile, IsOwnerOrReadOnlyUser
@@ -68,3 +69,22 @@ class ListFollowerAPIView(generics.ListAPIView):
     serializer_class = UserProfileFollowerShowSerializer
     filterset_fields = ['follower_profile', 'follower']
     permission_classes = [permissions.IsAuthenticated]
+
+
+class UnfollowAPIView(generics.DestroyAPIView):
+    queryset = UserProfileFollower.objects.all()
+    serializer_class = UserProfileFollowerSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            instance.follower_profile.followers_count -= 1
+            instance.follower_profile.save()
+            instance.follower.following_count -= 1
+            instance.follower.save()
+            self.perform_destroy(instance)
+        except:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
