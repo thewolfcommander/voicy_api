@@ -3,7 +3,8 @@ from rest_framework import serializers
 
 from accounts.models import (
     UserProfile,
-    UserProfileFollower
+    UserProfileFollower,
+    ChatTransactionApprove
 )
 
 
@@ -141,3 +142,26 @@ class UserProfileShowSerializer(serializers.ModelSerializer):
             'timestamp',
             'updated',
         )
+
+
+
+class ChatTransactionApproveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatTransactionApprove
+        fields = [
+            'id',
+            'sender',
+            'reciever',
+            'start_msg_id',
+            'is_approved',
+            'is_rejected',
+            'timestamp',
+            'updated',
+        ]
+
+    def update(self, instance, validated_data):
+        instance.is_approved = validated_data.get('is_approved', instance.is_approved)
+        instance.is_rejected = validated_data.get('is_rejected', instance.is_rejected)
+        instance.save()
+
+        return instance

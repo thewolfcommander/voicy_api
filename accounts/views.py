@@ -6,6 +6,7 @@ from accounts.permissions import IsOwnerOrReadOnlyProfile, IsOwnerOrReadOnlyUser
 from accounts.models import (
     UserProfile,
     UserProfileFollower,
+    ChatTransactionApprove
 )
 
 from accounts.serializers import *
@@ -88,3 +89,25 @@ class UnfollowAPIView(generics.DestroyAPIView):
         except:
             pass
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ChatTransactionApproveListCreateAPIView(generics.ListCreateAPIView):
+    queryset = ChatTransactionApprove.objects.all()
+    serializer_class = ChatTransactionApproveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filterset_fields = [
+        'sender',
+        'reciever',
+        'is_approved',
+        'is_rejected'
+    ]
+
+
+class ChatTransactionApproveDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ChatTransactionApprove.objects.all()
+    serializer_class = ChatTransactionApproveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

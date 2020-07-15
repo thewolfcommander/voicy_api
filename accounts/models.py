@@ -57,6 +57,24 @@ class UserProfileFollower(models.Model):
         return str(self.id)
 
 
+class ChatTransactionApprove(models.Model):
+    """
+    This will keep record of the first time chat is approved or not
+    """
+    id = models.CharField(max_length=100, unique=True, primary_key=True, blank=True)
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="sender")
+    reciever = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    start_msg_id = models.CharField(max_length=255, null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+
 def pre_save_id_reciever(sender, instance, **kwargs):
     if not instance.id:
         instance.id = str(tools.random_string_generator(20)).upper()
@@ -64,3 +82,4 @@ def pre_save_id_reciever(sender, instance, **kwargs):
 
 pre_save.connect(pre_save_id_reciever, sender=UserProfile)
 pre_save.connect(pre_save_id_reciever, sender=UserProfileFollower)
+pre_save.connect(pre_save_id_reciever, sender=ChatTransactionApprove)

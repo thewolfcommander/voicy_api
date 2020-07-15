@@ -14,4 +14,6 @@ urlpatterns = [
     path('create-follower/', FollowerAPIView.as_view()),
     path('unfollow/<slug:id>/', UnfollowAPIView.as_view()),
     path('followers/', ListFollowerAPIView.as_view()),
+    path('chats/', ChatTransactionApproveListCreateAPIView.as_view()),
+    path('chats/<slug:id>/', ChatTransactionApproveDetailAPIView.as_view()),
 ]
